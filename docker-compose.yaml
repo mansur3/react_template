@@ -1,10 +1,13 @@
 version: "1.1"
 
 services:
-  hello-world:
-    container_name: hello-world
-    build:
-      context: .
-      dockerfile: Dockerfile
+  reactjs:
     ports:
-      - "8877:80"
+      - 4000:3000
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/build
