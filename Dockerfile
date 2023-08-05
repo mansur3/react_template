@@ -2,21 +2,19 @@ FROM node:18-alpine
 
 ENV PORT 3000
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+# build environment
+FROM node:13.12.0-alpine as builder
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm ci --silent
+COPY . ./
+RUN npm run build
 
-# Installing dependencies
-COPY package*.json /usr/src/app/
-RUN yarn install
-
-# Copying source files
-COPY . /usr/src/app
-
-# Building app
-RUN yarn run build
-EXPOSE 3000
-
-# Running the app
-CMD ["yarn", "start"]
+FROM nginx:stable-alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 4000
+CMD ["nginx", "-g", "daemon off;"] 
 
 
