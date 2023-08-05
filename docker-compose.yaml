@@ -1,13 +1,27 @@
-version: "1.1"
+# version: "1.1"
+
+# services:
+#   reactjs:
+#     ports:
+#       - 4000:3000
+#     build:
+#       context: ./
+#       dockerfile: Dockerfile
+#     volumes:
+#       - .:/usr/src/app
+#       - /usr/src/app/node_modules
+#       - /usr/src/app/build
+version: "3.8"
 
 services:
-  reactjs:
-    ports:
-      - 4000:3000
+  # React application service
+  react_app:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/build
+    ports:
+      - "3000:80" # Map port 3000 on the host to port 80 in the container
+
+networks:
+  my_network:
+    driver: bridge
